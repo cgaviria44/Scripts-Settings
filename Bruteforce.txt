@@ -1,0 +1,77 @@
+/ip firewall filter
+add action=drop chain=input comment="Drop FTP brute forcers" dst-port=\
+    21 protocol=tcp src-address-list=ftp_blacklist
+add action=accept chain=output content="530 Login incorrect" dst-limit=\
+    1/1m,9,dst-address/1m protocol=tcp
+add action=add-dst-to-address-list address-list=ftp_blacklist \
+    address-list-timeout=3h chain=output content="530 Login incorrect" \
+    protocol=tcp
+add action=accept chain=input comment=\
+    "Allow packets belonging to existing connections" connection-state=\
+    established protocol=tcp
+add action=accept chain=input comment=\
+    "Allow packets related to existing connections" connection-state=\
+    related
+add action=accept chain=input comment="Allow SSH safe hosts" \
+    connection-state=new dst-port=22 protocol=tcp src-address-list=safe
+add action=drop chain=input comment="Drop SSH brute forcers" dst-port=\
+    22 protocol=tcp src-address-list=ssh_blacklist
+add action=add-src-to-address-list address-list=ssh_blacklist \
+    address-list-timeout=4w2d chain=input comment=\
+    "SSH brute forcers blacklisting" connection-state=new dst-port=22 \
+    protocol=tcp src-address-list=ssh_stage3
+add action=add-src-to-address-list address-list=ssh_stage3 \
+    address-list-timeout=1m chain=input comment=\
+    "SSH brute forcers the third stage" connection-state=new dst-port=\
+    22 protocol=tcp src-address-list=ssh_stage2
+add action=add-src-to-address-list address-list=ssh_stage2 \
+    address-list-timeout=1m chain=input comment=\
+    "SSH brute forcers the second stage" connection-state=new dst-port=\
+    22 protocol=tcp src-address-list=ssh_stage1
+add action=add-src-to-address-list address-list=ssh_stage1 \
+    address-list-timeout=1m chain=input comment=\
+    "SSH brute forcers the first stage" connection-state=new dst-port=\
+    22 protocol=tcp
+add action=drop chain=forward comment="Drop SSH brute downstream" \
+    dst-port=22 protocol=tcp src-address-list=ssh_blacklist
+add action=accept chain=input comment="Allow WinBox safe hosts" \
+    connection-state=new dst-port=8291 protocol=tcp src-address-list=\
+    safe
+add action=drop chain=input comment="Drop WinBox brute forcers" \
+    dst-port=8291 protocol=tcp src-address-list=wb_blacklist
+add action=add-src-to-address-list address-list=wb_blacklist \
+    address-list-timeout=1w3d chain=input comment=\
+    "WinBox brute forcers blacklisting" connection-state=new dst-port=\
+    8291 protocol=tcp src-address-list=wb_stage3
+add action=add-src-to-address-list address-list=wb_stage3 \
+    address-list-timeout=1m chain=input comment=\
+    "WinBox brute forcers the third stage" connection-state=new \
+    dst-port=8291 protocol=tcp src-address-list=wb_stage2
+add action=add-src-to-address-list address-list=wb_stage2 \
+    address-list-timeout=1m chain=input comment=\
+    "WinBox brute forcers the second stage" connection-state=new \
+    dst-port=8291 protocol=tcp src-address-list=wb_stage1
+add action=add-src-to-address-list address-list=wb_stage1 \
+    address-list-timeout=1m chain=input comment=\
+    "WinBox brute forcers the first stage" connection-state=new \
+    dst-port=8291 protocol=tcp
+add action=accept chain=input comment="Allow SSH" connection-state=new \
+    dst-port=22 protocol=tcp
+add action=accept chain=input comment="Allow WinBox" connection-state=\
+    new dst-port=8291 protocol=tcp
+add action=accept chain=input comment="Allow FTP" connection-state=new \
+    dst-port=20-21 protocol=tcp
+add action=add-src-to-address-list address-list=knock \
+    address-list-timeout=15s chain=input comment=\
+    "Port knocking the first stage" dst-port=1337 protocol=tcp
+add action=add-src-to-address-list address-list=safe \
+    address-list-timeout=15m chain=input comment=\
+    "Port knocking whitelisting" dst-port=7331 protocol=tcp \
+    src-address-list=knock
+add action=accept chain=output comment=\
+    "Allow only 10 FTP login incorrect answers per minute" content=\
+    "530 Login incorrect" dst-limit=1/1m,9,dst-address/1m protocol=tcp
+add action=add-dst-to-address-list address-list=ftp_blacklist \
+    address-list-timeout=3h chain=output comment=\
+    "FTP brute forcers blacklisting" content="530 Login incorrect" \
+    protocol=tcp

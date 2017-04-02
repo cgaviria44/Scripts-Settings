@@ -1,0 +1,240 @@
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Sw1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 4 06YFDUHH61wAE/kLkDq9BGho1QM5EnRtoyr8cHAUg.2
+enable password 7 00071A150754
+!
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+ speed 10
+ duplex half
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ ip address 192.168.1.5 255.255.255.0
+no shutdown
+!
+ip http server
+ip http secure-server
+!
+banner motd ^Cello my friend
+
+'banner motd ^C
+!
+line con 0
+ exec-timeout 0 0
+ password 7 01100F175804
+ logging synchronous
+ login
+line vty 0 4
+ exec-timeout 0 0
+ password 7 01100F175804
+ login
+line vty 5 15
+ login
+!
+end
+
+Sw1#sho
+Sw1#show r
+Sw1#show run
+Sw1#show running-config
+Building configuration...
+
+Current configuration : 1620 bytes
+!
+! Last configuration change at 02:48:58 UTC Mon Mar 1 1993
+!
+version 15.0
+no service pad
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname Sw1
+!
+boot-start-marker
+boot-end-marker
+!
+enable secret 4 06YFDUHH61wAE/kLkDq9BGho1QM5EnRtoyr8cHAUg.2
+enable password 7 00071A150754
+!
+no aaa new-model
+system mtu routing 1500
+!
+!
+no ip domain-lookup
+!
+!
+!
+!
+!
+!
+!
+!
+spanning-tree mode pvst
+spanning-tree extend system-id
+!
+vlan internal allocation policy ascending
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/1
+!
+interface FastEthernet0/2
+!
+interface FastEthernet0/3
+!
+interface FastEthernet0/4
+!
+interface FastEthernet0/5
+ speed 10
+ duplex half
+!
+interface FastEthernet0/6
+!
+interface FastEthernet0/7
+!
+interface FastEthernet0/8
+!
+interface FastEthernet0/9
+!
+interface FastEthernet0/10
+!
+interface FastEthernet0/11
+!
+interface FastEthernet0/12
+!
+interface FastEthernet0/13
+!
+interface FastEthernet0/14
+!
+interface FastEthernet0/15
+!
+interface FastEthernet0/16
+!
+interface FastEthernet0/17
+!
+interface FastEthernet0/18
+!
+interface FastEthernet0/19
+!
+interface FastEthernet0/20
+!
+interface FastEthernet0/21
+!
+interface FastEthernet0/22
+!
+interface FastEthernet0/23
+!
+interface FastEthernet0/24
+!
+interface GigabitEthernet0/1
+!
+interface GigabitEthernet0/2
+!
+interface Vlan1
+ ip address 192.168.1.5 255.255.255.0
+!
+ip http server
+ip http secure-server
+!
+banner motd ^Cello my friend
+
+'banner motd ^C
+!
+line con 0
+ exec-timeout 0 0
+ password 7 01100F175804
+ logging synchronous
+ login
+line vty 0 4
+ exec-timeout 0 0
+ password 7 01100F175804
+ login
+line vty 5 15
+ login
+!
+end

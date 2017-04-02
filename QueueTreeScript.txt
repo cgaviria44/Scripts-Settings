@@ -1,0 +1,3 @@
+/queue tree
+add comment="Download all" max-limit=200M name=Download-all parent=global
+add comment="Upload all" max-limit=200M name=Upload-all parent=global

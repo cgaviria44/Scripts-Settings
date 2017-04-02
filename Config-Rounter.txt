@@ -1,0 +1,52 @@
+enable
+configure terminal
+interface f0/0.10
+encapsulation dot1Q 10
+ip address 192.168.10.1 255.255.255.0
+exit
+interface f0/0.20
+encapsulation dot1Q 20
+ip address 192.168.20.1 255.255.255.0
+exit
+ip dhcp excluded-address 192.168.10.1
+ip dhcp excluded-address 192.168.20.1
+interface f0/1
+ip address dhcp
+exit
+ip dhcp pool DOCENTES
+network 192.168.10.0 255.255.255.0
+default-router 192.168.10.1
+dns-server 200.13.224.254
+exit
+ip dhcp pool ESTUDIANTES
+network 192.168.20.0 255.255.255.0
+default-router 192.168.20.1
+dns-server 200.13.224.254
+exit
+interface f0/0.10
+ip nat inside
+interface f0/0.20
+ip nat inside
+interface f0/1
+ip nat outside
+exit
+access-list 1 permit 192.168.10.0 0.0.0.255
+access-list 1 permit 192.168.20.0 0.0.0.255
+ip nat inside source list 1 interface f0/1 overload
+access-list 2 deny 192.168.20.0 0.0.0.255
+access-list 2 permit any
+interface f0/0.10
+ip access-group 2 out
+exit
+interface f0/0
+no shutdown
+exit
+interface f0/1
+no shutdown
+exit
+copy running-config startup-config
+
+line vyt 0 4
+password itm1235
+login
+exit

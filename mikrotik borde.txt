@@ -1,0 +1,37 @@
+interface eth7 100.0.0.1/26
+interface eth8 ---- ip DHCPclient-----
+--------------------------------------------------
+ruta statica
+
+ip router 192.168.50.0/24 ----next hop-- 100.0.0.2
+
+-----------------------
+NAT
+nat red privada a publica 
+
+ip firewall chain srcnat
+		action masquerade 
+______________________________________________
+web
+general-----chain------dstnat
+       ------protocolo---tcp
+       ------dis port----8080
+
+action-----dstnat
+      ------to addresses-----192.168.50.2
+      ------to port----80
+_________________________________________________
+ssh
+general-----chain------dstnat
+       ------protocolo---tcp
+       ------dist port----22
+
+action-----dstnat
+      ------to addresses-----100.0.0.2
+      ------to port----22
+--------------------------------------------
+firewall 
+ ip firewall filter roules add chain [forward/input/output]
+			       port [selec the port]
+			      in/out interface [select the interface]
+			action action [select the action 'drop, reject']

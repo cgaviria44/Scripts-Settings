@@ -1,0 +1,7 @@
+apt-get install apache2
+/var/www/html
+chown gaviria:adm /var/www/html   para cambiar el propietario al cual pertenece un archivo o directorio
+gedit /var/www/html/index.html
+
+/etc/init.d/apache2 restart
+

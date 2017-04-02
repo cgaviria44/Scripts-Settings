@@ -1,0 +1,32 @@
+Borde cisco
+
+interface fe 0/0
+	ip address 100.0.0.1	255.255.255.192
+	no sh
+
+interface fe 0/1 
+	ip address 192.168.50.1	255.255.255.0
+	no sh
+
+
+hostname Borde_cisco
+no ip domain-loockup
+
+username admin privilege 15 password admin
+ip domain-name cisco.com
+crypto key generate rsa 1024
+
+ip ssh version 2
+#line vty 0 4
+Borde_cisco(config-line)#password admin
+Borde_cisco(config-line)#login
+Borde_cisco(config-line)#login local
+Borde_cisco(config-line)#transport input ssh
+
+ip http server
+ip http authentication local
+
+
+snmp-server community hytw rw
+
+ip route 0.0.0.0 0.0.0.0 100.0.0.1 

@@ -1,0 +1,56 @@
+
+https://www.youtube.com/watch?v=D6jDfx7D778
+
+https://www.youtube.com/watch?v=hTem09LwlqA
+
+
+
+http://upsilons.blogspot.com.co/2013/12/penjelasan-chain-mikrotik-input-forward.html
+
+
+https://wiki.mikrotik.com/wiki/Manual:Queues_-_PCQ
+
+http://www.ryohnosuke.com/foros/index.php?threads/1550/
+
+http://www.inkalinux.com/foros/showthread.php?233-52-Firewall-Mangle-II-Marcar-Conexion-vs-Marcar-Paquetes-Mark-Connection-vs-Packet&p=2416#post2416
+
+https://app.webinarjam.net/thankyou/7923f48650?req=yA106956254wY
+
+
+
+
+[color=#008000]### Here's the mangle rules for the "basic" users. First one is for download, the second one is for the upload they both look at the address-list called Basic and act accordingly[/color]
+
+/ip firewall mangle
+add action=mark-packet chain=forward comment="User Basic Download" disabled=no dst-address-list=Basic new-packet-mark=Basic passthrough=no
+
+add action=mark-packet chain=forward comment="User Basic Upload" disabled=no new-packet-mark=2M passthrough=no src-address-list=Basic
+
+
+
+[color=#008000]###Here is the queue tree, we have a parent tree we set the Max Limit that all of the Queue's can use (we use our total bandwidth -10%, we use 2 here, one for download, and one for upload[/color]
+
+/queue tree
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=10M name=Download-All priority=6 parent=global
+ 
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=5M name=Upload-All parent=global priority=8
+
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 max-limit=3M name="1 User Basic" packet-mark=Basic parent=Download-All \
+    priority=5 queue="PCQ_1 Basic"
+
+add burst-limit=0 burst-threshold=0 burst-time=0s disabled=no limit-at=0 \
+    max-limit=0 name=User2M packet-mark=2M parent=Upload-All priority=6 \
+    queue="PCQ_U 2M"
+
+
+[color=#008000]###Here's the Queue type, here's where we set the limit on the connections, you can see here we have the download set at 384k, and the upload at 128k. neither one has bursting enabled[/color]
+/queue type
+add kind=pcq name="PCQ_1 Basic" pcq-burst-rate=0 pcq-burst-threshold=0 \
+    pcq-burst-time=10s pcq-classifier=dst-address pcq-dst-address-mask=32 \
+    pcq-dst-address6-mask=128 pcq-limit=50 pcq-rate=2M \
+    pcq-src-address-mask=32 pcq-src-address6-mask=128 pcq-total-limit=2000
+
+add kind=pcq name="PCQ_U 2M" pcq-burst-rate=0 pcq-burst-threshold=0 \
+    pcq-burst-time=10s pcq-classifier=src-address pcq-dst-address-mask=32 \
+    pcq-dst-address6-mask=128 pcq-limit=50 pcq-rate=128k \
+    pcq-src-address-mask=32 pcq-src-address6-mask=128 pcq-total-limit=2000

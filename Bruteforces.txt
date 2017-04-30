@@ -1,19 +1,20 @@
 /ip firewall filter
 add action=drop chain=input comment="Drop FTP brute forcers" dst-port=\
     21 protocol=tcp src-address-list=ftp_blacklist
-add action=accept chain=output content="530 Login incorrect" dst-limit=\
-    1/1m,9,dst-address/1m protocol=tcp
+add action=accept chain=output content="530 Login incorrect" \
+    dst-limit=1/1m,9,dst-address/1m protocol=tcp
 add action=add-dst-to-address-list address-list=ftp_blacklist \
     address-list-timeout=3h chain=output content="530 Login incorrect" \
     protocol=tcp
 add action=accept chain=input comment=\
-    "Allow packets belonging to existing connections" connection-state=\
-    established protocol=tcp
+    "Allow packets belonging to existing connections" \
+    connection-state=established protocol=tcp
 add action=accept chain=input comment=\
     "Allow packets related to existing connections" connection-state=\
     related
 add action=accept chain=input comment="Allow SSH safe hosts" \
-    connection-state=new dst-port=22 protocol=tcp src-address-list=safe
+    connection-state=new dst-port=22 protocol=tcp src-address-list=\
+    safe
 add action=drop chain=input comment="Drop SSH brute forcers" dst-port=\
     22 protocol=tcp src-address-list=ssh_blacklist
 add action=add-src-to-address-list address-list=ssh_blacklist \
@@ -26,8 +27,8 @@ add action=add-src-to-address-list address-list=ssh_stage3 \
     22 protocol=tcp src-address-list=ssh_stage2
 add action=add-src-to-address-list address-list=ssh_stage2 \
     address-list-timeout=1m chain=input comment=\
-    "SSH brute forcers the second stage" connection-state=new dst-port=\
-    22 protocol=tcp src-address-list=ssh_stage1
+    "SSH brute forcers the second stage" connection-state=new \
+    dst-port=22 protocol=tcp src-address-list=ssh_stage1
 add action=add-src-to-address-list address-list=ssh_stage1 \
     address-list-timeout=1m chain=input comment=\
     "SSH brute forcers the first stage" connection-state=new dst-port=\
@@ -40,7 +41,7 @@ add action=accept chain=input comment="Allow WinBox safe hosts" \
 add action=drop chain=input comment="Drop WinBox brute forcers" \
     dst-port=8291 protocol=tcp src-address-list=wb_blacklist
 add action=add-src-to-address-list address-list=wb_blacklist \
-    address-list-timeout=1w3d chain=input comment=\
+    address-list-timeout=4w2d chain=input comment=\
     "WinBox brute forcers blacklisting" connection-state=new dst-port=\
     8291 protocol=tcp src-address-list=wb_stage3
 add action=add-src-to-address-list address-list=wb_stage3 \
@@ -75,3 +76,13 @@ add action=add-dst-to-address-list address-list=ftp_blacklist \
     address-list-timeout=3h chain=output comment=\
     "FTP brute forcers blacklisting" content="530 Login incorrect" \
     protocol=tcp
+
+/ip firewall service-port
+set ftp disabled=yes
+set tftp disabled=yes
+set irc disabled=yes
+set h323 disabled=yes
+set sip disabled=yes
+set udplite disabled=yes
+set dccp disabled=yes
+set sctp disabled=yes

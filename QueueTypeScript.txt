@@ -3,6 +3,10 @@ add kind=pcq name="HogarB\E1sico_Download" pcq-classifier=src-address \
     pcq-dst-address6-mask=64 pcq-src-address6-mask=64
 add kind=pcq name="HogarB\E1sico_Upload" pcq-classifier=dst-address \
     pcq-dst-address6-mask=64 pcq-src-address6-mask=64
+add kind=pcq name=HogarIntermedio_Download pcq-classifier=src-address \
+    pcq-dst-address6-mask=64 pcq-src-address6-mask=64
+add kind=pcq name=HogarIntermedio_Upload pcq-classifier=dst-address \
+    pcq-dst-address6-mask=64 pcq-src-address6-mask=64
 add kind=pcq name=HogarPlus_Download pcq-classifier=src-address \
     pcq-dst-address6-mask=64 pcq-src-address6-mask=64
 add kind=pcq name=HogarPlus_Upload pcq-classifier=dst-address \
@@ -23,3 +27,4 @@ add kind=pcq name=PymeAvanzado_Download pcq-classifier=src-address \
     pcq-dst-address6-mask=64 pcq-src-address6-mask=64
 add kind=pcq name=PymeAvanzado_Upload pcq-classifier=dst-address \
     pcq-dst-address6-mask=64 pcq-src-address6-mask=64
+

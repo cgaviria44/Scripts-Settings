@@ -1,37 +1,4 @@
 /ip firewall mangle
-add action=mark-packet chain=forward comment="HogarB\E1sico Download" \
-    dst-address-list="HogarB\E1sico" new-packet-mark="HogarB\E1sico_Download" \
-    passthrough=no
-add action=mark-packet chain=forward comment="HogarB\E1sico Upload" \
-    new-packet-mark="HogarB\E1sico_Upload" passthrough=no src-address-list=\
-    "HogarB\E1sico"
-add action=mark-packet chain=forward comment="HogarPlus Download" \
-    dst-address-list=HogarPlus new-packet-mark=HogarPlus_Download passthrough=\
-    no
-add action=mark-packet chain=forward comment="HogarPlus Upload" \
-    new-packet-mark=HogarPlus_Upload passthrough=no src-address-list=HogarPlus
-add action=mark-packet chain=forward comment="HogarAvanzado Download" \
-    dst-address-list=HogarAvanzado new-packet-mark=HogarAvanzado_Download \
-    passthrough=no
-add action=mark-packet chain=forward comment="HogarAvanzado Upload" \
-    new-packet-mark=HogarAvanzado_Upload passthrough=no src-address-list=\
-    HogarAvanzado
-add action=mark-packet chain=forward comment="PymeB\E1sico Download" \
-    dst-address-list="PymeB\E1sico" new-packet-mark="PymeB\E1sico_Download" \
-    passthrough=no
-add action=mark-packet chain=forward comment="PymeB\E1sico Upload" \
-    new-packet-mark="PymeB\E1sico_Upload" passthrough=no src-address-list=\
-    "PymeB\E1sico"
-add action=mark-packet chain=forward comment="PymePlus Download" \
-    dst-address-list=PymePlus new-packet-mark=PymePlus_Download passthrough=no
-add action=mark-packet chain=forward comment="PymePlus Upload" new-packet-mark=\
-    PymePlus_Upload passthrough=no src-address-list=PymePlus
-add action=mark-packet chain=forward comment="PymeAvanzado Download" \
-    dst-address-list=PymeAvanzado new-packet-mark=PymeAvanzado_Download \
-    passthrough=no
-add action=mark-packet chain=forward comment="PymeAvanzado Upload" \
-    new-packet-mark=PymeAvanzado_Upload passthrough=no src-address-list=\
-    PymeAvanzado
 add action=mark-connection chain=prerouting comment="ICMP Traffic" \
     new-connection-mark=ICMP_Traffic passthrough=yes protocol=icmp
 add action=mark-packet chain=prerouting connection-mark=ICMP_Traffic \
@@ -83,3 +50,36 @@ add action=mark-connection chain=prerouting comment=Other new-connection-mark=\
     Other passthrough=yes
 add action=mark-packet chain=prerouting connection-mark=Other new-packet-mark=\
     OtherC passthrough=no
+add action=mark-packet chain=forward comment="HogarB\E1sico Download" \
+    dst-address-list="HogarB\E1sico" new-packet-mark="HogarB\E1sico_Download" \
+    passthrough=no
+add action=mark-packet chain=forward comment="HogarB\E1sico Upload" \
+    new-packet-mark="HogarB\E1sico_Upload" passthrough=no src-address-list=\
+    "HogarB\E1sico"
+add action=mark-packet chain=forward comment="HogarPlus Download" \
+    dst-address-list=HogarPlus new-packet-mark=HogarPlus_Download passthrough=\
+    no
+add action=mark-packet chain=forward comment="HogarPlus Upload" \
+    new-packet-mark=HogarPlus_Upload passthrough=no src-address-list=HogarPlus
+add action=mark-packet chain=forward comment="HogarAvanzado Download" \
+    dst-address-list=HogarAvanzado new-packet-mark=HogarAvanzado_Download \
+    passthrough=no
+add action=mark-packet chain=forward comment="HogarAvanzado Upload" \
+    new-packet-mark=HogarAvanzado_Upload passthrough=no src-address-list=\
+    HogarAvanzado
+add action=mark-packet chain=forward comment="PymeB\E1sico Download" \
+    dst-address-list="PymeB\E1sico" new-packet-mark="PymeB\E1sico_Download" \
+    passthrough=no
+add action=mark-packet chain=forward comment="PymeB\E1sico Upload" \
+    new-packet-mark="PymeB\E1sico_Upload" passthrough=no src-address-list=\
+    "PymeB\E1sico"
+add action=mark-packet chain=forward comment="PymePlus Download" \
+    dst-address-list=PymePlus new-packet-mark=PymePlus_Download passthrough=no
+add action=mark-packet chain=forward comment="PymePlus Upload" new-packet-mark=\
+    PymePlus_Upload passthrough=no src-address-list=PymePlus
+add action=mark-packet chain=forward comment="PymeAvanzado Download" \
+    dst-address-list=PymeAvanzado new-packet-mark=PymeAvanzado_Download \
+    passthrough=no
+add action=mark-packet chain=forward comment="PymeAvanzado Upload" \
+    new-packet-mark=PymeAvanzado_Upload passthrough=no src-address-list=\
+    PymeAvanzado

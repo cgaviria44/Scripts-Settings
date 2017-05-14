@@ -1,0 +1,141 @@
+Building configuration...
+
+Current configuration : 2385 bytes
+!
+! Last configuration change at 11:43:37 COL Sat Mar 4 2017
+!
+version 15.4
+service timestamps debug datetime msec
+service timestamps log datetime msec
+no service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone COL -5 0
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip cef
+no ipv6 cef
+!
+multilink bundle-name authenticated
+!
+!
+cts logging verbose
+!
+!
+license udi pid CISCO2901/K9 sn FJC1946A0P9
+!
+!
+!
+redundancy
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown
+!
+interface GigabitEthernet0/0
+ ip address 192.168.10.9 255.255.255.248
+ ip access-group 110 in
+ ip ospf authentication
+ ip ospf authentication-key prac-123
+ ip ospf message-digest-key 1 md5 practica-123
+ duplex auto
+ speed auto
+!
+interface GigabitEthernet0/1
+ ip address 192.168.10.61 255.255.255.252
+ ip access-group 120 out
+ ip ospf authentication
+ ip ospf authentication-key prac-123
+ ip ospf message-digest-key 1 md5 practica-123
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 192.168.10.46 255.255.255.252
+ ip ospf authentication
+ ip ospf authentication-key prac-123
+ ip ospf message-digest-key 1 md5 practica-123
+!
+interface Serial0/0/1
+ ip address 192.168.10.50 255.255.255.252
+ ip ospf authentication message-digest
+ ip ospf authentication-key prac-123
+ ip ospf message-digest-key 1 md5 practica-123
+!
+router ospf 1
+ area 0 authentication message-digest
+ network 192.168.10.8 0.0.0.7 area 0
+ network 192.168.10.44 0.0.0.3 area 0
+ network 192.168.10.48 0.0.0.3 area 0
+ network 192.168.10.60 0.0.0.3 area 0
+!
+ip forward-protocol nd
+!
+no ip http server
+no ip http secure-server
+!
+!
+logging trap alerts
+logging host 192.160.10.54
+!
+!
+access-list 110 deny   icmp 192.168.10.8 0.0.0.7 host 192.168.10.58
+access-list 110 deny   icmp 192.168.10.8 0.0.0.7 host 192.168.10.54
+access-list 110 deny   icmp 192.168.10.8 0.0.0.7 host 192.168.10.62
+access-list 110 permit ip any any
+access-list 120 permit tcp 192.168.10.24 0.0.0.7 host 192.168.10.62 eq ftp
+access-list 120 permit tcp 192.168.10.24 0.0.0.7 host 192.168.10.62 eq ftp-data
+!
+control-plane
+!
+!
+!
+line con 0
+line aux 0
+line 2
+ no activation-character
+ no exec
+ transport preferred none
+ transport output pad telnet rlogin lapb-ta mop udptn v120 ssh
+ stopbits 1
+line vty 0 4
+ login
+ transport input none
+!
+scheduler allocate 20000 1000
+ntp server 192.168.10.58
+!
+end

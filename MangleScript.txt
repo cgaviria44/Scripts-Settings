@@ -56,6 +56,12 @@ add action=mark-packet chain=forward comment="HogarB\E1sico Download" \
 add action=mark-packet chain=forward comment="HogarB\E1sico Upload" \
     new-packet-mark="HogarB\E1sico_Upload" passthrough=no src-address-list=\
     "HogarB\E1sico"
+add action=mark-packet chain=forward comment="Hogar Intermedio Download" \
+    dst-address-list=HogarIntermedio new-packet-mark=HogarIntermedio_Download \
+    passthrough=no
+add action=mark-packet chain=forward comment="HogarIntermedio Upload" \
+    new-packet-mark=HogarIntermedio_Upload passthrough=no src-address-list=\
+    HogarIntermedio
 add action=mark-packet chain=forward comment="HogarPlus Download" \
     dst-address-list=HogarPlus new-packet-mark=HogarPlus_Download passthrough=\
     no

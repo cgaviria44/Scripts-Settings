@@ -76,6 +76,8 @@ add action=add-dst-to-address-list address-list=ftp_blacklist \
     address-list-timeout=3h chain=output comment=\
     "FTP brute forcers blacklisting" content="530 Login incorrect" \
     protocol=tcp
+add action=drop chain=input comment="Discard invalid packets" \
+    connection-state=invalid
 
 /ip firewall service-port
 set ftp disabled=yes

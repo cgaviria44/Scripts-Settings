@@ -84,3 +84,10 @@ set sip disabled=yes
 set udplite disabled=yes
 set dccp disabled=yes
 set sctp disabled=yes
+
+/ip service
+set telnet disabled=yes
+set ftp disabled=yes
+set www disabled=yes
+set api disabled=yes
+set api-ssl disabled=yes

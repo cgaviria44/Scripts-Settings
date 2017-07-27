@@ -14,7 +14,7 @@ add action=accept chain=forward comment="Morosos - Acepta TCP 53" dst-port=53 \
 add action=accept chain=forward comment="Morosos - Acepta ICMP" in-interface=\
     ether2 protocol=icmp src-address-list=Morosos
 add action=drop chain=forward comment="Morosos - Dropea Todo el Resto" \
-    src-address-list=Morosos
+    in-interface=ether2 src-address-list=Morosos
 add action=drop chain=input comment="Drop FTP brute forcers" dst-port=21 \
     protocol=tcp src-address-list=ftp_blacklist
 add action=accept chain=output content="530 Login incorrect" dst-limit=\

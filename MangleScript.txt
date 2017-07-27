@@ -1,8 +1,10 @@
 /ip firewall mangle
-add action=mark-packet chain=forward comment="Matias Download" \
-    dst-address-list=Matias new-packet-mark=Matias_Download passthrough=no
-add action=mark-packet chain=forward comment="Matias Upload" new-packet-mark=\
-    Matias_Upload passthrough=no src-address-list=Matias
+add action=mark-packet chain=forward comment="Adriana Arboleda Download" \
+    dst-address-list=AdrianaArboleda new-packet-mark=AdrianaArboleda_Download \
+    passthrough=no
+add action=mark-packet chain=forward comment="Adriana Arboleda Upload" \
+    new-packet-mark=AdrianaArboleda_Upload passthrough=no src-address-list=\
+    AdrianaArboleda
 add action=mark-connection chain=prerouting comment="ICMP Traffic" \
     new-connection-mark=ICMP_Traffic passthrough=yes protocol=icmp
 add action=mark-packet chain=prerouting connection-mark=ICMP_Traffic \

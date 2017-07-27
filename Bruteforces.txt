@@ -1,8 +1,20 @@
 /ip firewall filter
 add action=drop chain=input comment="Drop DNS WAN" dst-port=53 in-interface=\
-    ether1 protocol=tcp
-add action=drop chain=input comment="Drop DNS WAN" dst-port=53 in-interface=\
     ether1 protocol=udp
+add action=drop chain=input comment="Drop DNS WAN" dst-port=53 in-interface=\
+    ether1 protocol=tcp
+add action=accept chain=forward comment="Morosos - Acepta TCP 80 " dst-port=80 \
+    in-interface=ether2 protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta TCP 443 " dst-port=\
+    443 in-interface=ether2 port="" protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta UDP 53" dst-port=53 \
+    in-interface=ether2 port="" protocol=udp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta TCP 53" dst-port=53 \
+    in-interface=ether2 protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta ICMP" in-interface=\
+    ether2 protocol=icmp src-address-list=Morosos
+add action=drop chain=forward comment="Morosos - Dropea Todo el Resto" \
+    src-address-list=Morosos
 add action=drop chain=input comment="Drop FTP brute forcers" dst-port=21 \
     protocol=tcp src-address-list=ftp_blacklist
 add action=accept chain=output content="530 Login incorrect" dst-limit=\

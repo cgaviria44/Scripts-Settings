@@ -1,3 +1,15 @@
 /queue tree
-add comment="Download All" max-limit=200M name=Download-All parent=global
-add comment="Upload All" max-limit=200M name=Upload-All parent=global
+add max-limit=10M name=Download-All parent=ether2
+add max-limit=2M name=Upload-All parent=ether1
+add name="Hogar_B\E1sico_Down" parent=Download-All
+add name="Hogar_B\E1sico_Up" parent=Upload-All
+add disabled=yes limit-at=1M max-limit=1536k name=PlayStation_Down packet-mark=\
+    PlayStation_Download parent="Hogar_B\E1sico_Down" priority=6 queue=PCQ_Down
+add disabled=yes limit-at=1M max-limit=1536k name=PlayStation_Up packet-mark=\
+    PlayStation_Upload parent="Hogar_B\E1sico_Up" priority=6 queue=PCQ_Up
+add name=Hogar_Avanzado_Down parent=Download-All
+add name=Hogar_Avanzado_Up parent=Upload-All
+add disabled=yes limit-at=9M max-limit=9728k name=Windows10_Down packet-mark=\
+    Windows10_Download parent=Hogar_Avanzado_Down priority=1 queue=PCQ_Down
+add disabled=yes limit-at=1M max-limit=1536k name=Windows10_Up packet-mark=\
+    Windows10_Upload parent=Hogar_Avanzado_Up priority=1 queue=PCQ_Up

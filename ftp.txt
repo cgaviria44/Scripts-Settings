@@ -1,4 +1,0 @@
-http://www.mclarenx.com/2012/08/10/configurar-vsftpd-y-evitar-los-errores-500-y-530/
-
-service vsftpd restart
-apt-get --purge remove

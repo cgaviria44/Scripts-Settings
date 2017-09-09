@@ -9,6 +9,10 @@ add action=mark-connection chain=prerouting comment="ICMP Traffic" \
     new-connection-mark=ICMP_Traffic passthrough=yes protocol=icmp
 add action=mark-packet chain=prerouting connection-mark=ICMP_Traffic \
     new-packet-mark=ICMP passthrough=no
+add action=mark-connection chain=prerouting comment="IGMP Traffic" \
+    new-connection-mark=IGMP_Traffic passthrough=yes protocol=igmp
+add action=mark-packet chain=prerouting connection-mark=IGMP_Traffic \
+    new-packet-mark=IGMP passthrough=no
 add action=mark-connection chain=prerouting comment="HTTP Traffic" dst-port=\
     80,8080 new-connection-mark=HTTP_Traffic passthrough=yes protocol=tcp
 add action=mark-packet chain=prerouting connection-mark=HTTP_Traffic \
@@ -26,6 +30,8 @@ add action=mark-connection chain=prerouting comment="DHCP Server Traffic" \
     protocol=udp
 add action=mark-packet chain=prerouting connection-mark=DHCP_Server_Traffic \
     new-packet-mark=DHCP_Server passthrough=no
+add action=mark-connection chain=prerouting comment="RDP Traffic" dst-port=3389 \
+    new-connection-mark=RDP_Traffic passthrough=yes protocol=tcp
 add action=mark-connection chain=prerouting comment="NTP Traffic" dst-port=123 \
     new-connection-mark=NTP_Traffic passthrough=yes protocol=udp
 add action=mark-packet chain=prerouting connection-mark=NTP_Traffic \

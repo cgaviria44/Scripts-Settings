@@ -5,6 +5,20 @@ add action=mark-packet chain=forward comment="Adriana Arboleda Download" \
 add action=mark-packet chain=forward comment="Adriana Arboleda Upload" \
     new-packet-mark=AdrianaArboleda_Upload passthrough=no src-address-list=\
     AdrianaArboleda
+add action=mark-connection chain=prerouting comment="Windows 10" \
+    new-connection-mark=Windows10_Conn passthrough=yes src-address-list=\
+    Windows10
+add action=mark-packet chain=prerouting connection-mark=Windows10_Conn \
+    new-packet-mark=Windows10_Pack passthrough=no
+add action=mark-connection chain=prerouting comment=PlayStation \
+    new-connection-mark=PlayStation_Conn passthrough=yes src-address-list=\
+    PlayStation
+add action=mark-packet chain=prerouting connection-mark=PlayStation_Conn \
+    new-packet-mark=PlayStation_Pack passthrough=no
+add action=mark-connection chain=prerouting comment=WLAN new-connection-mark=\
+    WLAN_Conn passthrough=yes src-address-list=WLAN
+add action=mark-packet chain=prerouting connection-mark=WLAN_Conn \
+    new-packet-mark=WLAN_Pack passthrough=no
 add action=mark-connection chain=prerouting comment="ICMP Traffic" \
     new-connection-mark=ICMP_Traffic passthrough=yes protocol=icmp
 add action=mark-packet chain=prerouting connection-mark=ICMP_Traffic \

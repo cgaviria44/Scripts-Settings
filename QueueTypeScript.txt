@@ -1,3 +1,7 @@
 /queue type
-add kind=pcq name=PCQ_Down pcq-burst-time=5s pcq-classifier=src-address
-add kind=pcq name=PCQ_Up pcq-burst-time=5s pcq-classifier=dst-address
+add kind=pcq name=PCQ_Down pcq-burst-time=5s pcq-classifier=dst-address
+add kind=pcq name=PCQ_Up pcq-burst-time=5s pcq-classifier=src-address
+add kind=pcq name=PCQ_Down_9st pcq-classifier=dst-address \
+    pcq-dst-address6-mask=64 pcq-rate=9216k pcq-src-address6-mask=64
+add kind=pcq name=PCQ_Up_1st pcq-classifier=src-address pcq-dst-address6-mask=\
+    64 pcq-rate=1536k pcq-src-address6-mask=64

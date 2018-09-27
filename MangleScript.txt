@@ -1,3 +1,6 @@
+/ip firewall layer7-protocol
+add name=speedtest regexp="^.+(speedtest).*\\\$"
+
 /ip firewall mangle
 add action=mark-connection chain=prerouting comment="Windows 10" \
     new-connection-mark=Windows10_Conn passthrough=yes src-address-list=\

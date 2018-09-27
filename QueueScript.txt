@@ -1,3 +1,8 @@
+/queue simple
+add dst=ether1 name=speedtest packet-marks=speedtest queue=\
+    PCQ_Up_1st/PCQ_Down_9st target=\
+    192.168.33.0/27,192.168.33.32/27,bridge1,wlan1
+    
 /queue tree
 add max-limit=10M name=HogarDown parent=global
 add max-limit=2M name=HogarUp parent=ether1

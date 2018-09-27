@@ -1,0 +1,172 @@
+/interface eoip
+add !keepalive mac-address=02:FE:63:0D:84:2E name=eoip-tunnel_Gestion remote-address=179.50.10.187 tunnel-id=7
+/interface ovpn-client
+add certificate=soporte_ret.crt_0 connect-to=190.146.21.123 mac-address=02:BB:36:03:39:30 name=soporte_ret password=zh0q0rt3 user=soporte_ret
+/ip firewall layer7-protocol
+add comment="Bloqueo Facebook" name=Facebook regexp="^.+(facebook.com).*\$"
+add comment="Bloqueo Paginas Pornografia" name=Bloqueo regexp="^.+(redtube|maduras|xxx|gay|porno|lesbianas|chaturbate|travestis|shemales|zoofilia|pasion|travesti|xnxx|xvid\
+    eos|shemaletubevideos|spicytrannyhd|porn|sexy|shemalecandys|alltrannysex|sex|sexo|tranny|ashemaletube|tgirls|xhamster|iwank|tgirlcentral|porngatherer|amateur|toys|cum|\
+    pichaloca|mrvideoscaseros.xxx|freex.mobi|en.luxuretv|zoofilium|japemusic|bingoporno|toroporno|aztecaporno|guarras|muycerdas|videoscaseros|wachiturras|canaljovencitas|v\
+    ideosdegaysx|pinguino69|pendejastrolas|putitas|transformistas|abuelas|coqnu|putas|mogliescopata|pornoorzel|zorras|pendejas|batidoraporno|trolas|turras|cornudos|morboca\
+    ms|cam|videoshentai|biginfinland|cholotube|videoxpornos|zubby|petardashd|imzog|pasionis|tgirlcentral|pornhub|pornosos|transexindex|trans|dirtypornvids|hqhole|hole|pene\
+    |besonegro|anybunny|tsflava|ts|vk.com/asian_shemales|asian|imzog|tastymovie|goldpornfilms|pinterest|Shemales|nuvid|london.backpage|chickswithdicks|potterhanworth|shema\
+    leroulette|drtuber|quora|chattino|zoo|tdivas|evilangel|tsescorts|she66|streamate|devilsfilm|mapage.noos.fr|wordwebonline|sy.adultsites|adult|greenprintcorp|chat.chueca\
+    |lcontactos|babosas|chateagratis|bravoporn|cogam|wien|egocitymgz|anal|hotgo|viejasfollando|japemusic|x18|zootubex|besuconas).*\$"
+add comment="Bloqueo de twitter" name=twitter regexp="^.+(twitter.com).*\$"
+add comment="Bloqueo de google+" name=google+ regexp="^.+(Google+.com).*\$"
+add comment="Bloqueo de linkedin" name=linkedin regexp="^.+(LinkedIn.com).*\$"
+add comment="Bloqueo de tumblr" name=tumblr regexp="^.+(Tumblr.com).*\$"
+add comment="Bloqueo de instagram" name=instagram regexp="^.+(instagram.com).*\$"
+add comment="Bloqueo de flickr" name=flickr regexp="^.+(Flickr.com).*\$"
+add comment="Bloqueo de reddit" name=reddit regexp="^.+(Reddit.com).*\$"
+add comment="Bloqueo de badoo" name=badoo regexp="^.+(Badoo.com).*\$"
+add comment="Bloqueo de deviantART" name=deviantART regexp="^.+(deviantART.com).*\$"
+add comment="Bloqueo de vimeo" name=vimeo regexp="^.+(Vimeo.com).*\$"
+add comment="Bloqueo de myspace" name=myspace regexp="^.+(myspace.com).*\$"
+add comment="Bloqueo de Taringa" name=Taringa regexp="^.+(Taringa!.com).*\$"
+add comment="Bloqueo de Badoo" name=43things regexp="^.+(43things.com).*\$"
+/ip ipsec proposal
+set [ find default=yes ] enc-algorithms=aes-128-cbc
+/ppp profile
+add local-address=192.168.171.1 name=l2tp remote-address=L2TP
+set *FFFFFFFE local-address=192.168.170.1 remote-address=OpenVPN
+/queue simple
+add bucket-size=1/1 burst-limit=20M/20M burst-threshold=15M/15M burst-time=4s/4s limit-at=4M/4M max-limit=10M/10M name=Canal8 priority=4/4 target=\
+    Canal8,ether6,ether7,192.168.6.0/24
+add bucket-size=1/1 burst-limit=20M/20M burst-threshold=15M/15M burst-time=3s/3s limit-at=4M/4M max-limit=10M/10M name="Claudia Marcela Rios" priority=3/3 target=\
+    ether3,192.168.4.3/32
+add limit-at=2M/2M max-limit=10M/10M name=Oficina_Conecta priority=5/5 target=192.168.1.0/24,ether10
+add limit-at=10M/10M max-limit=10M/10M name=Parques_WiFi target=ether9,172.20.0.0/20,172.19.0.0/22
+/queue type
+add kind=pcq name=PCQ-Down2M_wifi pcq-classifier=dst-address pcq-rate=2M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up2M_wifi pcq-classifier=src-address pcq-rate=2M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Down5M_EOC pcq-classifier=dst-address pcq-rate=5M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up5M_ECO pcq-classifier=src-address pcq-rate=5M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Down10M_eoc pcq-classifier=dst-address pcq-rate=10M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up10M_ECO pcq-classifier=src-address pcq-rate=10M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up2M_ECO pcq-classifier=src-address pcq-rate=2M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Down2M_ECO pcq-classifier=dst-address pcq-rate=2M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Down5M_wifi pcq-classifier=dst-address pcq-rate=5M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Down10M_wifi pcq-classifier=dst-address pcq-rate=10M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up5M_wifi pcq-classifier=src-address pcq-rate=5M pcq-total-limit=40000KiB
+add kind=pcq name=PCQ-Up10M_wifi pcq-classifier=src-address pcq-rate=10M pcq-total-limit=40000KiB
+/queue simple
+add bucket-size=1/1 burst-limit=50M/50M burst-threshold=40M/40M burst-time=4s/4s limit-at=30M/30M max-limit=30M/30M name=Alcaldia priority=4/4 queue=default/default \
+    target=sfp1,WAN_MEDIA_COMMERCE,190.0.247.19/32,190.0.247.18/32
+/queue tree
+add comment="Descarga Wifi" max-limit=40M name=Download_wifi parent=Internet queue=default
+add limit-at=20M max-limit=40M name=Wifi_Down2M packet-mark=Wifi_Down parent=Download_wifi queue=PCQ-Down2M_wifi
+add comment="Carga Wifi" max-limit=40M name=Upload_wifi parent=ether1 queue=default
+add limit-at=10M max-limit=40M name=Wifi_Up packet-mark=Wifi_Up parent=Upload_wifi queue=PCQ-Up2M_wifi
+add limit-at=20M max-limit=40M name=Wifi_Down5M packet-mark=Wifi_Down parent=Download_wifi queue=PCQ-Down5M_wifi
+add limit-at=10M max-limit=40M name=Wifi_Up5M packet-mark=Wifi5M-Up parent=Upload_wifi queue=PCQ-Up5M_wifi
+add comment="Descarga EOC" name=Download_EOC parent=ether8 queue=default
+add name=EOC_Down_2M packet-mark=User2M_Down parent=Download_EOC queue=PCQ-Down2M_ECO
+add name=EOC_Down_5M packet-mark=User5M_Down parent=Download_EOC queue=PCQ-Down5M_EOC
+add name=EOC_Down_10M packet-mark=User10M_Down parent=Download_EOC queue=PCQ-Down10M_eoc
+add comment="Carga EOC" name=Upload_EOC parent=ether1 queue=default
+add name=EOC_Up2M packet-mark=User2M_Up parent=Upload_EOC queue=PCQ-Up2M_ECO
+add name=EOC_Up5M packet-mark=User5M_Up parent=Upload_EOC queue=PCQ-Up5M_ECO
+add name=EOC_Up10M packet-mark=User10M_Down parent=Upload_EOC queue=PCQ-Up10M_wifi
+/interface l2tp-server server
+set allow-fast-path=no default-profile=default enabled=yes max-mru=1460 max-mtu=1460 max-sessions=unlimited
+/interface pptp-server server
+set authentication=pap,chap,mschap1,mschap2 enabled=yes
+/ip dhcp-server config
+set store-leases-disk=never
+/ip dhcp-server lease
+add address=172.18.0.45 client-id=1:0:f:1e:5e:53:42 mac-address=00:0F:1E:5E:53:42 server=dhcp_EOC
+/ip dns
+set allow-remote-requests=yes servers=2001:4860:4860::8888,2001:4860:4860::8844,200.110.169.20,190.90.1.90
+/ip firewall filter
+add action=drop chain=forward comment="Restricci\F3n de p\E1ginas pornograficas" disabled=yes layer7-protocol=Bloqueo src-address=172.20.0.0/20
+add action=add-src-to-address-list address-list=ssh_stage1 address-list-timeout=1m chain=input connection-state=new dst-port=22 protocol=tcp
+add action=add-src-to-address-list address-list=ssh_stage2 address-list-timeout=1m chain=input connection-state=new dst-port=22 protocol=tcp src-address-list=ssh_stage1
+add action=add-src-to-address-list address-list=ssh_stage3 address-list-timeout=1m chain=input connection-state=new dst-port=22 protocol=tcp src-address-list=ssh_stage2
+add action=add-src-to-address-list address-list=ssh_blacklist address-list-timeout=1w3d chain=input connection-state=new dst-port=22 protocol=tcp src-address-list=\
+    ssh_stage3
+add action=drop chain=input comment="drop ssh brute forcers" dst-port=22 protocol=tcp src-address-list=ssh_blacklist
+add chain=input comment=SSH dst-port=22 in-interface=WAN_MEDIA_COMMERCE protocol=tcp
+add chain=input comment="trafico Winbox" dst-port=8291 in-interface=WAN_MEDIA_COMMERCE protocol=tcp
+add chain=input comment="conexiones ya establecidas" connection-state=established in-interface=WAN_MEDIA_COMMERCE
+add chain=input comment="Conexiones doble puerto" connection-state=related in-interface=WAN_MEDIA_COMMERCE
+add chain=input comment=ICMP in-interface=WAN_MEDIA_COMMERCE protocol=icmp
+add action=drop chain=input comment="Bloqueo desconoxido" in-interface=WAN_MEDIA_COMMERCE
+add chain=forward comment="Morosos - Acepta TCP 80 " port=80 protocol=tcp src-address-list=MOROSOS
+add chain=forward comment="Morosos - Acepta TCP 443 " port=443 protocol=tcp src-address-list=MOROSOS
+add chain=forward comment="Morosos - Acepta UDP 53" port=53 protocol=udp src-address-list=MOROSOS
+add chain=forward comment="Morosos - Acepta ICMP" protocol=icmp src-address-list=MOROSOS
+add action=drop chain=forward comment="Morosos - Dropea Todo el Resto" src-address-list=MOROSOS
+/ip firewall mangle
+add action=mark-connection chain=prerouting comment="UP Wifi 2M" in-interface=Internet new-connection-mark=Wifi-Upload src-address=192.168.2.0/24
+add action=mark-packet chain=prerouting comment="Up Wifi 2M" connection-mark=Wifi-Upload new-packet-mark=Wifi_Up passthrough=no
+add action=mark-packet chain=prerouting comment="Down Wifi 2M" connection-mark=Wifi-Download new-packet-mark=Wifi_Down passthrough=no
+add action=mark-connection chain=prerouting comment="Up 5M Wifi" in-interface=Internet new-connection-mark=Wifi5M-Upload src-address=192.168.3.0/24
+add action=mark-connection chain=postrouting comment="Down Wifi 2M" dst-address=192.168.2.0/24 new-connection-mark=Wifi-Download out-interface=Internet
+add action=mark-packet chain=prerouting comment="Up Wifi 5M" connection-mark=Wifi5M-Upload new-packet-mark=Wifi5M-Up passthrough=no
+add action=mark-connection chain=postrouting comment="Down Wifi 5M" dst-address=192.168.3.0/24 new-connection-mark=Wifi-Dow5M out-interface=Internet
+add action=mark-packet chain=prerouting comment="Down Wifi 5M" connection-mark=Wifi-Dow5M new-packet-mark=Wifi_Down5M passthrough=no
+add action=mark-connection chain=prerouting comment="Up 10M Wifi" in-interface=Internet new-connection-mark=Wifi10M-Upload src-address=192.168.4.0/24
+add action=mark-packet chain=prerouting comment="Up Wifi 10M" connection-mark=Wifi10M-Upload new-packet-mark=Wifi10M-Up passthrough=no
+add action=mark-connection chain=postrouting comment="Down Wifi 10M" dst-address=192.168.4.0/24 new-connection-mark=Wifi-Dow10M out-interface=Internet
+add action=mark-packet chain=prerouting comment="Down Wifi 10M" connection-mark=Wifi-Dow10M new-packet-mark=Wifi_Down10M passthrough=no
+add action=mark-connection chain=prerouting comment="EOC 2M Up" in-interface=ether8 new-connection-mark=User2M_Upload src-address=172.18.0.0/24
+add action=mark-packet chain=prerouting comment="EOC 2M Up" connection-mark=User2M_Upload new-packet-mark=User2M_Up passthrough=no
+add action=mark-connection chain=forward comment="EOC 2M Down" new-connection-mark=User2M-Download out-interface=WAN_MEDIA_COMMERCE src-address=172.18.0.0/24
+add action=mark-packet chain=prerouting comment="EOC 2M Down" connection-mark=User2M-Download new-packet-mark=User2M_Down passthrough=no
+add action=mark-connection chain=prerouting comment="EOC 5M Up" in-interface=ether8 new-connection-mark=User5M-Upload src-address=172.18.4.0/22
+add action=mark-packet chain=prerouting comment="EOC 5M Up" connection-mark=User5M-Upload new-packet-mark=User5M_Up passthrough=no
+add action=mark-connection chain=forward comment="EOC 5M Down" new-connection-mark=User5M-Download out-interface=WAN_MEDIA_COMMERCE src-address=172.18.4.0/22
+add action=mark-packet chain=prerouting comment="EOC 5M Down" connection-mark=User5M-Download new-packet-mark=User5M_Down passthrough=no
+add action=mark-connection chain=prerouting comment="EOC 10M Up" in-interface=ether8 new-connection-mark=User10M-Upload src-address=172.18.8.0/22
+add action=mark-packet chain=prerouting comment="EOC 10M Up" connection-mark=User10M-Upload new-packet-mark=User10M_Up passthrough=no
+add action=mark-connection chain=forward comment="EOC 10M Down" new-connection-mark=User10M-Download out-interface=WAN_MEDIA_COMMERCE src-address=172.18.8.0/22
+add action=mark-packet chain=prerouting comment="EOC 10M Down" connection-mark=User10M-Download new-packet-mark=User10M_Down passthrough=no
+/ip firewall nat
+add action=dst-nat chain=dstnat comment="MOROSOS - Redirecciona 80" dst-port=80 protocol=tcp src-address-list=MOROSOS to-addresses=192.168.253.2 to-ports=80
+add action=dst-nat chain=dstnat comment="MOROSOS - Redirecciona 443" dst-port=443 protocol=tcp src-address-list=MOROSOS to-addresses=192.168.253.2 to-ports=443
+add action=masquerade chain=srcnat
+add action=dst-nat chain=dstnat dst-port=8443 in-interface=WAN_MEDIA_COMMERCE protocol=tcp to-addresses=192.168.253.2 to-ports=8443
+/ip proxy
+set anonymous=yes parent-proxy=0.0.0.0
+/ip traffic-flow
+set enabled=yes
+/ip traffic-flow target
+add dst-address=179.50.10.187
+/ipv6 address
+add address=2800:490:4800:100::2 interface=WAN_MEDIA_COMMERCE
+/ipv6 route
+add distance=1 gateway=2800:490:4800:100::1
+add distance=1 gateway=2800:490:4800:100::1
+/lcd
+set time-interval=daily
+/ppp secret
+add local-address=192.168.81.1 name=daniel password=zh0q0rt3 profile=default-encryption remote-address=192.168.81.9 routes=192.168.81.1
+/snmp
+set contact=pedroguerrerozuluaga@gmail.com enabled=yes location="El Retiro"
+/system clock
+set time-zone-autodetect=no time-zone-name=America/Bogota
+/system identity
+set name=Core_El_Retiro
+/system ntp client
+set enabled=yes primary-ntp=190.27.239.38 secondary-ntp=201.234.79.113
+/system routerboard settings
+set cpu-frequency=1200MHz force-backup-booter=yes memory-frequency=1066DDR
+/tool graphing interface
+add
+add
+/tool graphing queue
+add
+add
+/tool graphing resource
+add
+add
+/tool netwatch
+add down-script="/tool e-mail send server=173.194.78.26 from=wendymarin@gtdflywan.com  to=soporteteltic@gmail.com subject=CaidaFibraPpal-Putumayo body=\"Se cayo el enlace \
+    de el Putumayo\"" host=152.231.24.67
+add down-script="/tool e-mail send server=173.194.78.26 from=wendymarin@gtdflywan.com  to=soporteteltic@gmail.com subject=CaidaFibraPpal-Putumayo body=\"Se cayo el enlace \
+    de el Putumayo\"" host=152.231.24.67
+/tool traffic-monitor
+add interface=sfp1 name=tmon1 threshold=0
+add interface=WAN_MEDIA_COMMERCE name=tmon3 threshold=0
+add interface=ether1 name=tmon4 threshold=0

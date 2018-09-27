@@ -1,10 +1,4 @@
 /ip firewall mangle
-add action=mark-packet chain=forward comment="Adriana Arboleda Download" \
-    dst-address-list=AdrianaArboleda new-packet-mark=AdrianaArboleda_Download \
-    passthrough=no
-add action=mark-packet chain=forward comment="Adriana Arboleda Upload" \
-    new-packet-mark=AdrianaArboleda_Upload passthrough=no src-address-list=\
-    AdrianaArboleda
 add action=mark-connection chain=prerouting comment="Windows 10" \
     new-connection-mark=Windows10_Conn passthrough=yes src-address-list=\
     Windows10
@@ -19,75 +13,14 @@ add action=mark-connection chain=prerouting comment=WLAN new-connection-mark=\
     WLAN_Conn passthrough=yes src-address-list=WLAN
 add action=mark-packet chain=prerouting connection-mark=WLAN_Conn \
     new-packet-mark=WLAN_Pack passthrough=no
-add action=mark-connection chain=prerouting comment="ICMP Traffic" \
-    new-connection-mark=ICMP_Traffic passthrough=yes protocol=icmp
-add action=mark-packet chain=prerouting connection-mark=ICMP_Traffic \
-    new-packet-mark=ICMP passthrough=no
-add action=mark-connection chain=prerouting comment="IGMP Traffic" \
-    new-connection-mark=IGMP_Traffic passthrough=yes protocol=igmp
-add action=mark-packet chain=prerouting connection-mark=IGMP_Traffic \
-    new-packet-mark=IGMP passthrough=no
-add action=mark-connection chain=prerouting comment="HTTP Traffic" dst-port=\
-    80,8080 new-connection-mark=HTTP_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=HTTP_Traffic \
-    new-packet-mark=HTTP passthrough=no
-add action=mark-connection chain=prerouting comment="HTTPS Traffic" dst-port=\
-    443 new-connection-mark=HTTPS_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=HTTPS_Traffic \
-    new-packet-mark=HTTPS passthrough=no
-add action=mark-connection chain=prerouting comment="DNS Traffic" dst-port=53 \
-    new-connection-mark=DNS_Traffic passthrough=yes protocol=udp
-add action=mark-packet chain=prerouting connection-mark=DNS_Traffic \
-    new-packet-mark=DNS passthrough=no
-add action=mark-connection chain=prerouting comment="DHCP Server Traffic" \
-    dst-port=67 new-connection-mark=DHCP_Server_Traffic passthrough=yes \
-    protocol=udp
-add action=mark-packet chain=prerouting connection-mark=DHCP_Server_Traffic \
-    new-packet-mark=DHCP_Server passthrough=no
-add action=mark-connection chain=prerouting comment="RDP Traffic" dst-port=3389 \
-    new-connection-mark=RDP_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=RDP_Traffic \
-    new-packet-mark=RDP passthrough=no
-add action=mark-connection chain=prerouting comment="NTP Traffic" dst-port=123 \
-    new-connection-mark=NTP_Traffic passthrough=yes protocol=udp
-add action=mark-packet chain=prerouting connection-mark=NTP_Traffic \
-    new-packet-mark=NTP passthrough=no
-add action=mark-connection chain=prerouting comment="SMTP Traffic" dst-port=\
-    110,995,143,993,25,465,587 new-connection-mark=SMTP_Traffic passthrough=yes \
-    protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=SMTP_Traffic \
-    new-packet-mark=SMTP passthrough=no
-add action=mark-connection chain=prerouting comment="SNMP Traffic" dst-port=\
-    161,162 new-connection-mark=SNMP_Traffic passthrough=yes protocol=udp
-add action=mark-packet chain=prerouting connection-mark=SNMP_Traffic \
-    new-packet-mark=SNMP passthrough=no
-add action=mark-connection chain=prerouting comment="PPTP VPN" dst-port=1723 \
-    new-connection-mark=PPTP_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=PPTP_Traffic \
-    new-packet-mark=PPTP_Traffic passthrough=no
-add action=mark-connection chain=prerouting comment="L2TP/IPSEC VPN" dst-port=\
-    50,51,500,4500,1701 new-connection-mark=L2TP_Traffic passthrough=yes \
-    protocol=udp
-add action=mark-packet chain=prerouting connection-mark=L2TP_Traffic \
-    new-packet-mark=L2TP passthrough=no
-add action=mark-connection chain=prerouting comment="OpenVPN Traffic" dst-port=\
-    1194 new-connection-mark=OpenVPN_Traffic passthrough=yes protocol=udp
-add action=mark-packet chain=prerouting connection-mark=OpenVPN_Traffic \
-    new-packet-mark=OpenVPN_Traffic passthrough=no
-add action=mark-connection chain=prerouting comment="VoIP Traffic" dst-port=\
-    5060,5061,8089,1000-2000 new-connection-mark=VOIP_Traffic passthrough=yes \
-    protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=VOIP_Traffic \
-    new-packet-mark=VOIP passthrough=no
-add action=mark-connection chain=prerouting comment="FTP Traffic" dst-port=\
-    20,21 new-connection-mark=FTP_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=FTP_Traffic \
-    new-packet-mark=FTP passthrough=no
-add action=mark-connection chain=prerouting comment="SSH Traffic" dst-port=22 \
-    new-connection-mark=SSH_Traffic passthrough=yes protocol=tcp
-add action=mark-packet chain=prerouting connection-mark=SSH_Traffic \
-    new-packet-mark=SSH passthrough=no
-add action=mark-connection chain=prerouting comment="Other Traffic" \
-    new-connection-mark=Other_Traffic passthrough=yes
-add action=mark-packet chain=prerouting connection-mark=Other_Traffic \
-    new-packet-mark=Other passthrough=no
+add action=mark-connection chain=forward comment=Speedtest.net \
+    layer7-protocol=speedtest new-connection-mark=speedtest_conn passthrough=\
+    yes
+add action=mark-connection chain=prerouting new-connection-mark=speedtest_conn \
+    passthrough=yes protocol=tcp src-port=8080
+add action=mark-packet chain=prerouting connection-mark=speedtest_conn \
+    new-packet-mark=speedtest passthrough=no
+add action=mark-connection chain=postrouting dst-port=8080 \
+    new-connection-mark=speedtest_conn passthrough=yes protocol=tcp
+add action=mark-packet chain=postrouting connection-mark=speedtest_conn \
+    new-packet-mark=speedtest passthrough=no

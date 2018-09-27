@@ -1,15 +1,15 @@
 /queue tree
-add max-limit=10M name=Download-All parent=ether2
-add max-limit=2M name=Upload-All parent=ether1
-add name="Hogar_B\E1sico_Down" parent=Download-All
-add name="Hogar_B\E1sico_Up" parent=Upload-All
-add disabled=yes limit-at=1M max-limit=1536k name=PlayStation_Down packet-mark=\
-    PlayStation_Download parent="Hogar_B\E1sico_Down" priority=6 queue=PCQ_Down
-add disabled=yes limit-at=1M max-limit=1536k name=PlayStation_Up packet-mark=\
-    PlayStation_Upload parent="Hogar_B\E1sico_Up" priority=6 queue=PCQ_Up
-add name=Hogar_Avanzado_Down parent=Download-All
-add name=Hogar_Avanzado_Up parent=Upload-All
-add disabled=yes limit-at=9M max-limit=9728k name=Windows10_Down packet-mark=\
-    Windows10_Download parent=Hogar_Avanzado_Down priority=1 queue=PCQ_Down
-add disabled=yes limit-at=1M max-limit=1536k name=Windows10_Up packet-mark=\
-    Windows10_Upload parent=Hogar_Avanzado_Up priority=1 queue=PCQ_Up
+add max-limit=10M name=HogarDown parent=global
+add max-limit=2M name=HogarUp parent=ether1
+add limit-at=9M max-limit=10M name=Windows10_Down packet-mark=Windows10_Pack \
+    parent=HogarDown priority=1 queue=PCQ_Down
+add limit-at=1M max-limit=2M name=Windows10_Up packet-mark=Windows10_Pack \
+    parent=HogarUp priority=1 queue=PCQ_Up
+add limit-at=768k max-limit=2M name=PlayStation_Down packet-mark=\
+    PlayStation_Pack parent=HogarDown priority=2 queue=PCQ_Down
+add limit-at=768k max-limit=1M name=PlayStation_Up packet-mark=\
+    PlayStation_Pack parent=HogarUp priority=2 queue=PCQ_Up
+add limit-at=256k max-limit=2M name=WLAN_Down packet-mark=WLAN_Pack parent=\
+    HogarDown priority=3 queue=PCQ_Down
+add limit-at=256k max-limit=1M name=WLAN_Up packet-mark=WLAN_Pack parent=\
+    HogarUp priority=3 queue=PCQ_Up

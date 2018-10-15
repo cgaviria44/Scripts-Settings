@@ -1,0 +1,25 @@
+/ip firewall nat
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=5060 in-interface=ether1 protocol=udp to-addresses=172.28.0.1 \
+    to-ports=5060
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=5060 in-interface=ether1 protocol=tcp to-addresses=172.28.0.1 \
+    to-ports=5060
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=5061 in-interface=ether1 protocol=udp to-addresses=172.28.0.1 \
+    to-ports=5061
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=5061 in-interface=ether1 protocol=tcp to-addresses=172.28.0.1 \
+    to-ports=5061
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=8089 in-interface=ether1 protocol=udp to-addresses=172.28.0.1 \
+    to-ports=8089
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=8089 in-interface=ether1 protocol=tcp to-addresses=172.28.0.1 \
+    to-ports=8089
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=10000-20000 in-interface=ether1 protocol=udp to-addresses=\
+    172.28.0.1 to-ports=10000-20000
+add action=dst-nat chain=dstnat comment=VoIP dst-address=190.217.113.42 \
+    dst-port=10000-20000 in-interface=ether1 protocol=tcp to-addresses=\
+    172.28.0.1 to-ports=10000-20000

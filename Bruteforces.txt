@@ -86,4 +86,5 @@ set telnet disabled=yes
 set ftp disabled=yes
 set www disabled=yes
 set api disabled=yes
+set winbox port=58291
 set api-ssl disabled=yes

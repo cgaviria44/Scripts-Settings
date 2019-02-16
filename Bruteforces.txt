@@ -3,24 +3,28 @@ add action=drop chain=input comment="Drop DNS WAN" dst-port=53 in-interface=\
     ether1 protocol=udp
 add action=drop chain=input comment="Drop DNS WAN" dst-port=53 in-interface=\
     ether1 protocol=tcp
-add chain=forward comment="Morosos - Acepta TCP 80 " dst-port=80 in-interface=\
-    ether2 protocol=tcp src-address-list=Morosos
-add chain=forward comment="Morosos - Acepta TCP 443 " dst-port=443 \
-    in-interface=ether2 protocol=tcp src-address-list=Morosos
-add chain=forward comment="Morosos - Acepta UDP 53" dst-port=53 in-interface=\
-    ether2 protocol=udp src-address-list=Morosos
-add chain=forward comment="Morosos - Acepta TCP 53" dst-port=53 in-interface=\
-    ether2 protocol=tcp src-address-list=Morosos
-add chain=forward comment="Morosos - Acepta ICMP" in-interface=ether2 protocol=\
-    icmp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta TCP 80 " dst-port=80 \
+    protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta TCP 443 " dst-port=\
+    443 protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta UDP 53" dst-port=53 \
+    protocol=udp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta TCP 53" dst-port=53 \
+    protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Acepta ICMP" protocol=icmp \
+    src-address-list=Morosos
 add action=reject chain=forward comment="Morosos - Reject anything else" \
-    in-interface=ether2 reject-with=icmp-network-unreachable src-address-list=\
-    Morosos
-add chain=forward comment=\
-    "Allow packets belonging to existing and related connections" \
+    reject-with=icmp-network-unreachable src-address-list=Morosos
+add action=accept chain=input comment=\
+    "Allow packets belonging to established and related connections" \
     connection-state=established,related
-add chain=input comment="Allow SSH safe hosts" connection-state=new dst-port=22 \
-    protocol=tcp src-address-list=safe
+add action=accept chain=forward comment=\
+    "Allow packets belonging to established and related connections" \
+    connection-state=established,related
+add action=accept chain=input comment="Allow SSH" connection-state=new \
+    dst-port=22 protocol=tcp
+add action=accept chain=input comment="Allow WinBox" connection-state=new \
+    dst-port=58291 protocol=tcp
 add action=drop chain=input comment="Drop SSH brute forcers" dst-port=22 \
     protocol=tcp src-address-list=ssh_blacklist
 add action=add-src-to-address-list address-list=ssh_blacklist \
@@ -41,35 +45,29 @@ add action=add-src-to-address-list address-list=ssh_stage1 \
     protocol=tcp
 add action=drop chain=forward comment="Drop SSH brute downstream" dst-port=22 \
     protocol=tcp src-address-list=ssh_blacklist
-add chain=input comment="Allow WinBox safe hosts" connection-state=new \
-    dst-port=8291 protocol=tcp src-address-list=safe
-add action=drop chain=input comment="Drop WinBox brute forcers" dst-port=8291 \
+add action=drop chain=input comment="Drop WinBox brute forcers" dst-port=58291 \
     protocol=tcp src-address-list=wb_blacklist
 add action=add-src-to-address-list address-list=wb_blacklist \
     address-list-timeout=1w chain=input comment=\
-    "WinBox brute forcers blacklisting" connection-state=new dst-port=8291 \
+    "WinBox brute forcers blacklisting" connection-state=new dst-port=58291 \
     protocol=tcp src-address-list=wb_stage3
 add action=add-src-to-address-list address-list=wb_stage3 address-list-timeout=\
     1m chain=input comment="WinBox brute forcers the third stage" \
-    connection-state=new dst-port=8291 protocol=tcp src-address-list=wb_stage2
+    connection-state=new dst-port=58291 protocol=tcp src-address-list=wb_stage2
 add action=add-src-to-address-list address-list=wb_stage2 address-list-timeout=\
     1m chain=input comment="WinBox brute forcers the second stage" \
-    connection-state=new dst-port=8291 protocol=tcp src-address-list=wb_stage1
+    connection-state=new dst-port=58291 protocol=tcp src-address-list=wb_stage1
 add action=add-src-to-address-list address-list=wb_stage1 address-list-timeout=\
     1m chain=input comment="WinBox brute forcers the first stage" \
-    connection-state=new dst-port=8291 protocol=tcp
-add chain=input comment="Allow SSH" connection-state=new dst-port=22 protocol=\
-    tcp
-add chain=input comment="Allow WinBox" connection-state=new dst-port=8291 \
-    protocol=tcp
-add action=add-src-to-address-list address-list=knock address-list-timeout=15s \
-    chain=input comment="Port knocking the first stage" dst-port=1337 protocol=\
-    tcp
-add action=add-src-to-address-list address-list=safe address-list-timeout=15m \
-    chain=input comment="Port knocking whitelisting" dst-port=7331 protocol=tcp \
-    src-address-list=knock
+    connection-state=new dst-port=58291 protocol=tcp
+add action=drop chain=input comment="Discard invalid packets" \
+    connection-state=invalid
 add action=drop chain=forward comment="Discard invalid packets" \
     connection-state=invalid
+add action=drop chain=forward comment=\
+    "Drop incoming packets that are not NATted" connection-nat-state=!dstnat \
+    connection-state=new in-interface=ether1 log=yes log-prefix=!NAT
+add action=drop chain=input comment="Drop Anything else" disabled=yes
 
 /ip firewall service-port
 set ftp disabled=yes
@@ -84,7 +82,7 @@ set pptp disabled=yes
 /ip service
 set telnet disabled=yes
 set ftp disabled=yes
-set www disabled=yes
+set www port=60080
 set api disabled=yes
 set winbox port=58291
 set api-ssl disabled=yes

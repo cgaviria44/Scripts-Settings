@@ -4,12 +4,6 @@
 :log info ("Sistema de respaldo creado a las" . [/sys cl get time] . " " . [/sys cl get date])}
 
 /system scheduler
-add interval=3d name=Respaldos on-event=Respaldos policy=\
+add interval=5d name=Respaldos on-event=Respaldos policy=\
     ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
-    start-date=Dec/14/2018 start-time=07:00:00
-
-
-
-http://www.mclarenx.com/2012/08/10/configurar-vsftpd-y-evitar-los-errores-500-y-530/
-service vsftpd restart
-apt-get --purge remove
+    start-date=Feb/28/2019 start-time=07:00:00

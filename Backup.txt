@@ -4,6 +4,6 @@
 :log info ("Sistema de respaldo creado a las" . [/sys cl get time] . " " . [/sys cl get date])}
 
 /system scheduler
-add interval=5d name=Respaldos on-event=Respaldos policy=\
+add interval=3d name=Respaldos on-event=Respaldos policy=\
     ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
     start-date=Feb/28/2019 start-time=07:00:00

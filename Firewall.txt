@@ -100,3 +100,7 @@ set www port=60080
 set api disabled=yes
 set winbox port=58291
 set api-ssl disabled=yes
+
+/ip firewall nat
+add action=dst-nat chain=dstnat comment="Redirect Morosos" dst-port=80,443 \
+    protocol=tcp src-address-list=Morosos to-addresses=172.30.31.12

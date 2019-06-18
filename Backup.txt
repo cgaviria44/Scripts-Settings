@@ -6,4 +6,15 @@
 /system scheduler
 add interval=3d name=Respaldos on-event=Respaldos policy=\
     ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
-    start-date=Feb/28/2019 start-time=07:00:00
+    start-date=Jun/18/2019 start-time=07:00:00
+    
+
+/system script add name=Respaldos source={/system backup save name=([/system identity get name] . "-" . \
+[:pick [/system clock get date] 7 11] . [:pick [/system clock get date] 0 3] . [:pick [/system clock get date] 4 6]); \
+\
+:log info ("Sistema de respaldo creado a las" . [/sys cl get time] . " " . [/sys cl get date])}
+
+/system scheduler
+add interval=7d name=Respaldos on-event=Respaldos policy=\
+    ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+    start-date=Jun/18/2019 start-time=07:00:00

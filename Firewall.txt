@@ -13,94 +13,87 @@ add action=accept chain=forward comment="Morosos - Allow ICMP" protocol=icmp \
     src-address-list=Morosos
 add action=reject chain=forward comment="Morosos - Reject anything else" \
     reject-with=icmp-network-unreachable src-address-list=Morosos
-add action=drop chain=forward comment="Block spammers or infected users" \
-    dst-port=25,465,587,143,993,110,995 protocol=tcp src-address-list=spammer
 add action=add-src-to-address-list address-list=spammer address-list-timeout=1d \
     chain=forward comment="Detect and add-list SMTP virus or spammers" \
     connection-limit=30,32 dst-port=25,465,587,143,993,110,995 limit=\
-    30,5:packet protocol=tcp
-add action=drop chain=forward comment="Drop SMTP" dst-port=25 protocol=tcp
-add action=drop chain=input comment="Drop anyone in Black List (Winbox)." \
-    in-interface=ether1 log=yes log-prefix="BL_Black List (Winbox)" \
-    src-address-list="Black List (Winbox)"
-add action=jump chain=input comment="Jump to Black List (Winbox) chain." \
-    dst-port=58291 in-interface=ether1 jump-target="Black List (Winbox) Chain" \
+    30,0:packet protocol=tcp
+add action=drop chain=forward comment="Block spammers or infected users" \
+    dst-port=25,465,587,143,993,110,995 protocol=tcp src-address-list=spammer
+add action=jump chain=forward comment="Jump Virus" jump-target=virus
+add action=drop chain=virus dst-port=\
+    135-139,445,593,1024-1030,1080,1214,1363,1364,1368,1373,1377,1433-1434 \
     protocol=tcp
+add action=drop chain=virus dst-port=\
+    25,2745,2283,2535,2745,3410,4444,5554,8866,9898,10000,10080,12345,17300 \
+    protocol=tcp
+add action=drop chain=virus dst-port=3127-3128,27374,65506 protocol=tcp
+add action=drop chain=virus dst-port=135-139,445,4444 protocol=udp
+add action=drop chain=input comment="Drop anyone in Black List (Winbox)." log=\
+    yes log-prefix="BL_Black List (Winbox)" src-address-list=\
+    "Black List (Winbox)"
+add action=jump chain=input comment="Jump to Black List (Winbox) chain." \
+    dst-port=58291 jump-target="Black List (Winbox) Chain" protocol=tcp
 add action=add-src-to-address-list address-list="Black List (Winbox)" \
-    address-list-timeout=4w2d chain="Black List (Winbox) Chain" comment="Transfe\
-    r repeated attempts from Black List (Winbox) Stage 3 to Black List (Winbox).\
-    " connection-state=new in-interface=ether1 log=yes log-prefix=\
-    "Add_Black List (Winbox)" src-address-list="Black List (Winbox) Stage 3"
+    address-list-timeout=1w chain="Black List (Winbox) Chain" comment="Transfer \
+    repeated attempts from Black List (Winbox) Stage 3 to Black List (Winbox)." \
+    connection-state=new log=yes log-prefix="Add_Black List (Winbox)" \
+    src-address-list="Black List (Winbox) Stage 3"
 add action=add-src-to-address-list address-list="Black List (Winbox) Stage 3" \
     address-list-timeout=1m chain="Black List (Winbox) Chain" comment=\
     "Add succesive attempts to Black List (Winbox) Stage 3." connection-state=\
-    new in-interface=ether1 log=yes log-prefix="Add_Black List (Winbox) S3" \
-    src-address-list="Black List (Winbox) Stage 2"
+    new log=yes log-prefix="Add_Black List (Winbox) S3" src-address-list=\
+    "Black List (Winbox) Stage 2"
 add action=add-src-to-address-list address-list="Black List (Winbox) Stage 2" \
     address-list-timeout=1m chain="Black List (Winbox) Chain" comment=\
     "Add succesive attempts to Black List (Winbox) Stage 2." connection-state=\
-    new in-interface=ether1 log=yes log-prefix="Add_Black List (Winbox) S2" \
-    src-address-list="Black List (Winbox) Stage 1"
+    new log=yes log-prefix="Add_Black List (Winbox) S2" src-address-list=\
+    "Black List (Winbox) Stage 1"
 add action=add-src-to-address-list address-list="Black List (Winbox) Stage 1" \
     address-list-timeout=1m chain="Black List (Winbox) Chain" comment=\
     "Add initial attempt to Black List (Winbox) Stage 1." connection-state=new \
-    in-interface=ether1 log=yes log-prefix="Add_Black List (Winbox) S1"
+    log=yes log-prefix="Add_Black List (Winbox) S1"
 add action=return chain="Black List (Winbox) Chain" comment=\
     "Return From Black List (Winbox) chain."
-add action=drop chain=input comment="Drop anyone in Black List (SSH)." \
-    in-interface=ether1 log=yes log-prefix="BL_Black List (SSH)" \
-    src-address-list="Black List (SSH)"
+add action=drop chain=input comment="Drop anyone in Black List (SSH)." log=yes \
+    log-prefix="BL_Black List (SSH)" src-address-list="Black List (SSH)"
 add action=jump chain=input comment="Jump to Black List (SSH) chain." dst-port=\
-    22 in-interface=ether1 jump-target="Black List (SSH) Chain" protocol=tcp
+    2200 jump-target="Black List (SSH) Chain" protocol=tcp
 add action=add-src-to-address-list address-list="Black List (SSH)" \
-    address-list-timeout=4w2d chain="Black List (SSH) Chain" comment="Transfer r\
-    epeated attempts from Black List (SSH) Stage 3 to Black List (SSH)." \
-    connection-state=new in-interface=ether1 log=yes log-prefix=\
-    "Add_Black List (SSH)" src-address-list="Black List (SSH) Stage 3"
+    address-list-timeout=1w chain="Black List (SSH) Chain" comment="Transfer rep\
+    eated attempts from Black List (SSH) Stage 3 to Black List (SSH)." \
+    connection-state=new log=yes log-prefix="Add_Black List (SSH)" \
+    src-address-list="Black List (SSH) Stage 3"
 add action=add-src-to-address-list address-list="Black List (SSH) Stage 3" \
     address-list-timeout=1m chain="Black List (SSH) Chain" comment=\
     "Add successive attempts to Black List (SSH) Stage 3." connection-state=new \
-    in-interface=ether1 log=yes log-prefix="Add_Black List (SSH) S3" \
-    src-address-list="Black List (SSH) Stage 2"
+    log=yes log-prefix="Add_Black List (SSH) S3" src-address-list=\
+    "Black List (SSH) Stage 2"
 add action=add-src-to-address-list address-list="Black List (SSH) Stage 2" \
     address-list-timeout=1m chain="Black List (SSH) Chain" comment=\
     "Add successive attempts to Black List (SSH) Stage 2." connection-state=new \
-    in-interface=ether1 log=yes log-prefix="Add_Black List (SSH) S2" \
-    src-address-list="Black List (SSH) Stage 1"
+    log=yes log-prefix="Add_Black List (SSH) S2" src-address-list=\
+    "Black List (SSH) Stage 1"
 add action=add-src-to-address-list address-list="Black List (SSH) Stage 1" \
     address-list-timeout=1m chain="Black List (SSH) Chain" comment=\
     "Add initial attempt to Black List (SSH) Stage 1." connection-state=new \
-    in-interface=ether1 log=yes log-prefix="Add_Black List (SSH) S1"
+    log=yes log-prefix="Add_Black List (SSH) S1"
 add action=return chain="Black List (SSH) Chain" comment=\
     "Return From Black List (SSH) chain."
 add action=jump chain=input comment="Jump Services" jump-target=Services
-add action=accept chain=Services comment="Allow services" dst-port=\
-    443,58291,2200,60080 protocol=tcp
+add action=accept chain=Services comment="Allow services" dst-port=58291,60080 \
+    protocol=tcp
 add action=accept chain=Services comment="Allow services" dst-port=161,162 \
     protocol=udp
 add action=accept chain=Services comment="Allow services" protocol=icmp
+add action=add-src-to-address-list address-list=Port_Scanner \
+    address-list-timeout=1w chain=input comment="Port Scanner Detect" protocol=\
+    tcp psd=21,3s,3,1
+add action=drop chain=input comment="Drop to port scan list" src-address-list=\
+    Port_Scanner
 add action=drop chain=input comment="Discard invalid packets" connection-state=\
     invalid
 add action=drop chain=output comment="Discard invalid packets" \
     connection-state=invalid
 add action=drop chain=forward comment="Discard invalid packets" \
     connection-state=invalid
-add action=drop chain=input comment="Drop Anything else" in-interface=ether1
-
-/ip firewall raw
-add action=drop chain=prerouting comment="Drop DNS WAN" dst-port=53,953 in-interface=ether1 \
-    protocol=udp
-add action=drop chain=prerouting comment="Drop DNS WAN" dst-port=53,953 in-interface=ether1 \
-    protocol=tcp
-
-/ip service
-set telnet disabled=yes
-set ftp disabled=yes
-set www port=60080
-set api disabled=yes
-set winbox port=58291
-set api-ssl disabled=yes
-
-/ip firewall nat
-add action=dst-nat chain=dstnat comment="Redirect Morosos" dst-port=80,443 \
-    protocol=tcp src-address-list=Morosos to-addresses=172.30.31.12
+add action=drop chain=input comment="Drop anything else" in-interface=ether1

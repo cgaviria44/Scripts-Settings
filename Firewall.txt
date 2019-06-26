@@ -15,7 +15,7 @@ add action=reject chain=forward comment="Morosos - Reject anything else" \
     reject-with=icmp-network-unreachable src-address-list=Morosos
 add action=add-src-to-address-list address-list=spammer address-list-timeout=1d \
     chain=forward comment="Detect and add-list SMTP virus or spammers" \
-    connection-limit=30,32 dst-port=25,465,587,143,993,110,995 limit=\
+    connection-limit=10,32 dst-port=25,465,587,143,993,110,995 limit=\
     30,0:packet protocol=tcp
 add action=drop chain=forward comment="Block spammers or infected users" \
     dst-port=25,465,587,143,993,110,995 protocol=tcp src-address-list=spammer

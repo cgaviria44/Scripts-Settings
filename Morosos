@@ -1,0 +1,16 @@
+/ip firewall address-list
+add address=172.21.0.23 list=Morosos
+
+/ip firewall filter
+add action=accept chain=forward comment="Morosos - Allow Web" dst-port=80,443 \
+    protocol=tcp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Allow UDP 53" dst-port=53 \
+    protocol=udp src-address-list=Morosos
+add action=accept chain=forward comment="Morosos - Allow ICMP" protocol=icmp \
+    src-address-list=Morosos
+add action=reject chain=forward comment="Morosos - Reject anything else" \
+    reject-with=icmp-network-unreachable src-address-list=Morosos
+    
+/ip firewall nat
+add action=dst-nat chain=dstnat comment="Redirect Morosos" dst-port=80,443 \
+    protocol=tcp src-address-list=Morosos to-addresses=172.30.31.12
